@@ -74,14 +74,19 @@ exports.handler = async (event) => {
     // ---- Upload photos to Cloudinary ----
     const photoUrls = [];
 
-    for (const photo of photoBuffers) {
+    for (let i = 0; i < photoBuffers.length; i++) {
+      const photo = photoBuffers[i];
       const base64 = photo.buffer.toString('base64');
       const dataUri = `data:${photo.mimetype};base64,${base64}`;
+
+      // Give each photo a clean, slash-free public_id so Cloudinary
+      // never tries to derive a display name from the original filename
+      const publicId = `${finalSlug}-photo-${i + 1}`;
 
       const formData = new URLSearchParams();
       formData.append('file',           dataUri);
       formData.append('upload_preset',  process.env.CLOUDINARY_PRESET);
-      // Note: folder parameter removed — Cloudinary preset handles organization
+      formData.append('public_id',      publicId);
 
       const uploadRes = await fetch(
         `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD}/image/upload`,
