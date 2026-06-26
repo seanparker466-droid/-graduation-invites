@@ -5,7 +5,7 @@
 # ================================================================
 
 [build]
-  publish   = "public"        # your HTML/CSS files live here
+  publish   = "Public"        # your HTML/CSS files live here
   functions = "netlify/functions"  # serverless functions live here
 
 # Route /invite/anything to invite.html
