@@ -1,0 +1,8 @@
+{
+  "name": "graduation-invite-platform",
+  "version": "1.0.0",
+  "description": "Graduation Open House invite builder",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

@@ -1,0 +1,22 @@
+# ================================================================
+#  Netlify Configuration
+#  This file tells Netlify how to route URLs and run functions.
+#  You do not need to edit this file.
+# ================================================================
+
+[build]
+  publish   = "public"        # your HTML/CSS files live here
+  functions = "netlify/functions"  # serverless functions live here
+
+# Route /invite/anything to invite.html
+# This is what makes graduateinvites.netlify.app/invite/ethan-reynolds-2026 work
+[[redirects]]
+  from   = "/invite/*"
+  to     = "/invite.html"
+  status = 200
+
+# Catch-all — send unknown routes to the builder form
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

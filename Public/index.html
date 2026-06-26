@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Your Graduation Invite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold:      #C9A84C;
+      --gold-bg:   #FAF6ED;
+      --cream:     #FAF7F2;
+      --ink:       #1A1A1A;
+      --ink-soft:  #5A5A5A;
+      --border:    #E8E2D9;
+      --radius:    10px;
+      --font-d:    'Cormorant Garamond', Georgia, serif;
+      --font-b:    'DM Sans', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      font-family: var(--font-b);
+      font-weight: 300;
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      text-align: center;
+      padding: clamp(2.5rem, 8vw, 5rem) 1.5rem clamp(1.5rem, 4vw, 2.5rem);
+      border-bottom: 1px solid var(--border);
+    }
+    .header__eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+    .header__title {
+      font-family: var(--font-d);
+      font-weight: 300;
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+    .header__title em { font-style: italic; color: var(--gold); }
+    .header__sub {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ---- Progress bar ---- */
+    .progress-wrap {
+      max-width: 560px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      position: relative;
+    }
+    .progress-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .progress-step.done:not(:last-child)::after { background: var(--gold); }
+    .step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 500;
+      color: var(--ink-soft);
+      position: relative; z-index: 1;
+      transition: all 0.3s ease;
+    }
+    .progress-step.active .step-dot {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #fff;
+    }
+    .progress-step.done .step-dot {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #fff;
+    }
+    .step-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .progress-step.active .step-label { color: var(--gold); font-weight: 500; }
+
+    /* ---- Main layout ---- */
+    .main {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* ---- Steps ---- */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .step-heading {
+      font-family: var(--font-d);
+      font-weight: 300;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 0.35rem;
+      line-height: 1.2;
+    }
+    .step-heading em { font-style: italic; color: var(--gold); }
+    .step-intro {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 1.75rem;
+      line-height: 1.65;
+    }
+
+    /* ---- Form fields ---- */
+    .field { margin-bottom: 1.25rem; }
+    .field label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-bottom: 0.4rem;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fff;
+      font-family: var(--font-b);
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease;
+      -webkit-appearance: none;
+    }
+    .field input:focus, .field select:focus { border-color: var(--gold); }
+    .field input::placeholder { color: #bbb; }
+    .field-hint {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-top: 0.35rem;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* ---- Photo upload zone ---- */
+    .upload-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      background: #fff;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--gold);
+      background: var(--gold-bg);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .upload-label {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+    .upload-label span { color: var(--gold); text-decoration: underline; }
+    .upload-sub { font-size: 0.78rem; color: #aaa; }
+
+    /* ---- Photo preview grid ---- */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
+      margin-top: 1rem;
+    }
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--border);
+    }
+    .preview-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .preview-item .remove-btn {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 20px; height: 20px;
+      background: rgba(0,0,0,0.55);
+      border: none; border-radius: 50%;
+      color: #fff; font-size: 12px;
+      cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    .preview-item.hero-badge::after {
+      content: 'Hero';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(201,168,76,0.85);
+      color: #fff;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 3px 0;
+    }
+    .photo-count {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      margin-top: 0.5rem;
+    }
+
+    /* ---- RSVP toggle ---- */
+    .toggle-row {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: 0.65rem;
+      border: none;
+      background: #fff;
+      font-family: var(--font-b);
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .toggle-btn.active {
+      background: var(--gold);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* ---- Navigation buttons ---- */
+    .nav-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: var(--radius);
+      font-family: var(--font-b);
+      font-size: 0.88rem;
+      font-weight: 400;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn--primary { background: var(--gold); color: #fff; }
+    .btn--primary:hover { opacity: 0.88; }
+    .btn--ghost {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
+    }
+    .btn--ghost:hover { border-color: var(--ink-soft); }
+    .btn--full { width: 100%; justify-content: center; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ---- Error messages ---- */
+    .error-msg {
+      font-size: 0.78rem;
+      color: #c0392b;
+      margin-top: 0.35rem;
+      display: none;
+    }
+    .field.has-error input,
+    .field.has-error select { border-color: #c0392b; }
+    .field.has-error .error-msg { display: block; }
+
+    /* ---- Success screen ---- */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    .success-screen.active { display: block; }
+    .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .success-title {
+      font-family: var(--font-d);
+      font-weight: 300;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      margin-bottom: 0.5rem;
+    }
+    .success-title em { font-style: italic; color: var(--gold); }
+    .success-sub {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .link-box {
+      background: var(--gold-bg);
+      border: 1px solid #e8d49a;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .link-box-url {
+      flex: 1;
+      font-size: 0.88rem;
+      color: var(--ink);
+      word-break: break-all;
+      font-weight: 400;
+    }
+    .copy-btn {
+      flex-shrink: 0;
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      border: 1px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-family: var(--font-b);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: var(--gold); color: #fff; }
+    .copy-btn.copied { background: var(--gold); color: #fff; }
+
+    /* ---- Loading spinner ---- */
+    .spinner-wrap {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    .spinner-wrap.active { display: flex; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner-label {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 420px) {
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <p class="header__eyebrow">Graduation Open House</p>
+    <h1 class="header__title">Create your <em>invite</em></h1>
+    <p class="header__sub">Fill in your details below and we'll build your personalised invitation page — ready to share in minutes.</p>
+
+    <!-- Progress indicator -->
+    <div class="progress-wrap">
+      <div class="progress-steps">
+        <div class="progress-step active" id="prog-1">
+          <div class="step-dot">1</div>
+          <span class="step-label">Graduate</span>
+        </div>
+        <div class="progress-step" id="prog-2">
+          <div class="step-dot">2</div>
+          <span class="step-label">Event</span>
+        </div>
+        <div class="progress-step" id="prog-3">
+          <div class="step-dot">3</div>
+          <span class="step-label">Photos</span>
+        </div>
+        <div class="progress-step" id="prog-4">
+          <div class="step-dot">4</div>
+          <span class="step-label">RSVP</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main form area -->
+  <main class="main">
+
+    <!-- ===================== STEP 1 — Graduate info ===================== -->
+    <div class="step-panel active" id="step-1">
+      <h2 class="step-heading">About the <em>graduate</em></h2>
+      <p class="step-intro">Let's start with the basics — who are we celebrating?</p>
+
+      <div class="field" id="f-firstName">
+        <label for="firstName">First name</label>
+        <input type="text" id="firstName" placeholder="Ethan" autocomplete="given-name" />
+        <p class="error-msg">Please enter a first name.</p>
+      </div>
+
+      <div class="field" id="f-lastName">
+        <label for="lastName">Last name</label>
+        <input type="text" id="lastName" placeholder="Reynolds" autocomplete="family-name" />
+        <p class="error-msg">Please enter a last name.</p>
+      </div>
+
+      <div class="field" id="f-highSchool">
+        <label for="highSchool">High school name</label>
+        <input type="text" id="highSchool" placeholder="Lakeview High School" />
+        <p class="error-msg">Please enter the high school name.</p>
+      </div>
+
+      <div class="field" id="f-classYear">
+        <label for="classYear">Graduation year</label>
+        <input type="text" id="classYear" placeholder="2026" maxlength="4" inputmode="numeric" />
+        <p class="error-msg">Please enter a 4-digit year.</p>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--primary" onclick="goToStep(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- ===================== STEP 2 — Event details ===================== -->
+    <div class="step-panel" id="step-2">
+      <h2 class="step-heading">Event <em>details</em></h2>
+      <p class="step-intro">When and where is the open house? We'll use this to build your calendar button and directions link.</p>
+
+      <div class="field" id="f-eventDate">
+        <label for="eventDate">Date of the open house</label>
+        <input type="date" id="eventDate" />
+        <p class="error-msg">Please pick a date.</p>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="f-startTime">
+          <label for="startTime">Start time</label>
+          <input type="time" id="startTime" />
+          <p class="error-msg">Required.</p>
+        </div>
+        <div class="field" id="f-endTime">
+          <label for="endTime">End time</label>
+          <input type="time" id="endTime" />
+          <p class="error-msg">Required.</p>
+        </div>
+      </div>
+
+      <div class="field" id="f-address">
+        <label for="address">Street address</label>
+        <input type="text" id="address" placeholder="247 Maple Ridge Drive" autocomplete="street-address" />
+        <p class="error-msg">Please enter the street address.</p>
+      </div>
+
+      <div class="field-row">
+        <div class="field" id="f-city">
+          <label for="city">City</label>
+          <input type="text" id="city" placeholder="Oxford" autocomplete="address-level2" />
+          <p class="error-msg">Required.</p>
+        </div>
+        <div class="field" id="f-state">
+          <label for="state">State</label>
+          <input type="text" id="state" placeholder="MI" maxlength="2" autocomplete="address-level1" />
+          <p class="error-msg">Required.</p>
+        </div>
+      </div>
+
+      <div class="field" id="f-zip">
+        <label for="zip">ZIP code</label>
+        <input type="text" id="zip" placeholder="48371" maxlength="5" inputmode="numeric" autocomplete="postal-code" />
+        <p class="error-msg">Please enter a ZIP code.</p>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--ghost" onclick="goToStep(1)">← Back</button>
+        <button class="btn btn--primary" onclick="goToStep(3)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- ===================== STEP 3 — Photos ===================== -->
+    <div class="step-panel" id="step-3">
+      <h2 class="step-heading">Add your <em>photos</em></h2>
+      <p class="step-intro">Upload one hero photo for the top of the page, then as many gallery photos as you'd like. The <strong>first photo you upload</strong> becomes the hero.</p>
+
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="photo-input" accept="image/*" multiple />
+        <div class="upload-icon">📷</div>
+        <p class="upload-label">Tap to choose photos <span>or drag them here</span></p>
+        <p class="upload-sub">JPG, PNG or HEIC · Up to 10 photos · Max 10MB each</p>
+      </div>
+
+      <div class="preview-grid" id="preview-grid"></div>
+      <p class="photo-count" id="photo-count"></p>
+
+      <div class="nav-row">
+        <button class="btn btn--ghost" onclick="goToStep(2)">← Back</button>
+        <button class="btn btn--primary" onclick="goToStep(4)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- ===================== STEP 4 — RSVP ===================== -->
+    <div class="step-panel" id="step-4">
+      <h2 class="step-heading">RSVP <em>contact</em></h2>
+      <p class="step-intro">How would you like guests to RSVP? Tapping the button on your invite will open a pre-filled text or email.</p>
+
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="toggle-sms" onclick="setRsvpMode('sms')">📱 Text message</button>
+        <button class="toggle-btn" id="toggle-email" onclick="setRsvpMode('email')">✉️ Email</button>
+      </div>
+
+      <div id="rsvp-sms-fields">
+        <div class="field" id="f-rsvpPhone">
+          <label for="rsvpPhone">Your cell number</label>
+          <input type="tel" id="rsvpPhone" placeholder="248-555-1234" inputmode="tel" autocomplete="tel" />
+          <p class="field-hint">Guests will be able to tap a button that opens a text to this number.</p>
+          <p class="error-msg">Please enter a phone number.</p>
+        </div>
+      </div>
+
+      <div id="rsvp-email-fields" style="display:none;">
+        <div class="field" id="f-rsvpEmail">
+          <label for="rsvpEmail">Your email address</label>
+          <input type="email" id="rsvpEmail" placeholder="you@example.com" autocomplete="email" />
+          <p class="error-msg">Please enter a valid email.</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="rsvpMessage">Pre-filled message guests will send</label>
+        <input type="text" id="rsvpMessage" value="Hi! I'm planning to come to the open house 🎓" />
+        <p class="field-hint">You can edit this to whatever feels right.</p>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--ghost" onclick="goToStep(3)">← Back</button>
+        <button class="btn btn--primary btn--full" id="submit-btn" onclick="submitForm()">
+          ✨ Build my invite
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================== LOADING ===================== -->
+    <div class="spinner-wrap" id="loading-screen">
+      <div class="spinner"></div>
+      <p class="spinner-label" id="loading-msg">Uploading your photos…</p>
+    </div>
+
+    <!-- ===================== SUCCESS ===================== -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">🎓</div>
+      <h2 class="success-title">Your invite is <em>live!</em></h2>
+      <p class="success-sub">Your personalised graduation invite page is ready. Copy the link below and share it anywhere — text, email, Facebook, wherever.</p>
+
+      <div class="link-box">
+        <span class="link-box-url" id="invite-url"></span>
+        <button class="copy-btn" id="copy-btn" onclick="copyLink()">Copy</button>
+      </div>
+
+      <button class="btn btn--primary btn--full" onclick="openInvite()">
+        Preview my invite →
+      </button>
+    </div>
+
+  </main>
+
+  <script>
+    // ================================================================
+    //  CONFIGURATION — update this one line with your Netlify site URL
+    //  once you've deployed. Leave it as-is while testing locally.
+    // ================================================================
+    const SITE_URL = window.location.origin;
+
+    // ================================================================
+    //  STATE
+    // ================================================================
+    let currentStep = 1;
+    let rsvpMode    = 'sms';
+    let photos      = [];   // Array of File objects
+    let generatedUrl = '';
+
+    // ================================================================
+    //  STEP NAVIGATION
+    // ================================================================
+    function goToStep(n) {
+      // Validate before moving forward
+      if (n > currentStep && !validateStep(currentStep)) return;
+
+      document.getElementById(`step-${currentStep}`).classList.remove('active');
+      document.getElementById(`prog-${currentStep}`).classList.remove('active');
+      document.getElementById(`prog-${currentStep}`).classList.add('done');
+
+      currentStep = n;
+
+      document.getElementById(`step-${n}`).classList.add('active');
+
+      // Update progress dots
+      document.getElementById(`prog-${n}`).classList.remove('done');
+      document.getElementById(`prog-${n}`).classList.add('active');
+
+      // Scroll to top of form smoothly
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ================================================================
+    //  VALIDATION
+    // ================================================================
+    function validateStep(step) {
+      let valid = true;
+
+      const checks = {
+        1: [
+          { id: 'firstName',  fid: 'f-firstName',  test: v => v.trim().length > 0 },
+          { id: 'lastName',   fid: 'f-lastName',   test: v => v.trim().length > 0 },
+          { id: 'highSchool', fid: 'f-highSchool', test: v => v.trim().length > 0 },
+          { id: 'classYear',  fid: 'f-classYear',  test: v => /^\d{4}$/.test(v.trim()) },
+        ],
+        2: [
+          { id: 'eventDate', fid: 'f-eventDate', test: v => v.length > 0 },
+          { id: 'startTime', fid: 'f-startTime', test: v => v.length > 0 },
+          { id: 'endTime',   fid: 'f-endTime',   test: v => v.length > 0 },
+          { id: 'address',   fid: 'f-address',   test: v => v.trim().length > 0 },
+          { id: 'city',      fid: 'f-city',      test: v => v.trim().length > 0 },
+          { id: 'state',     fid: 'f-state',     test: v => v.trim().length > 0 },
+          { id: 'zip',       fid: 'f-zip',       test: v => /^\d{5}$/.test(v.trim()) },
+        ],
+        3: [], // photos are optional
+        4: rsvpMode === 'sms'
+          ? [{ id: 'rsvpPhone', fid: 'f-rsvpPhone', test: v => v.replace(/\D/g,'').length >= 10 }]
+          : [{ id: 'rsvpEmail', fid: 'f-rsvpEmail', test: v => /\S+@\S+\.\S+/.test(v) }],
+      };
+
+      (checks[step] || []).forEach(({ id, fid, test }) => {
+        const el  = document.getElementById(id);
+        const wrap = document.getElementById(fid);
+        if (!test(el.value)) {
+          wrap.classList.add('has-error');
+          valid = false;
+        } else {
+          wrap.classList.remove('has-error');
+        }
+      });
+
+      return valid;
+    }
+
+    // ================================================================
+    //  RSVP TOGGLE
+    // ================================================================
+    function setRsvpMode(mode) {
+      rsvpMode = mode;
+      document.getElementById('toggle-sms').classList.toggle('active', mode === 'sms');
+      document.getElementById('toggle-email').classList.toggle('active', mode === 'email');
+      document.getElementById('rsvp-sms-fields').style.display   = mode === 'sms'   ? '' : 'none';
+      document.getElementById('rsvp-email-fields').style.display = mode === 'email' ? '' : 'none';
+    }
+
+    // ================================================================
+    //  PHOTO UPLOAD & PREVIEW
+    // ================================================================
+    document.getElementById('photo-input').addEventListener('change', function() {
+      addPhotos(Array.from(this.files));
+      this.value = ''; // reset so same file can be re-added if removed
+    });
+
+    const zone = document.getElementById('upload-zone');
+    zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      addPhotos(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+    });
+
+    function addPhotos(files) {
+      const remaining = 10 - photos.length;
+      const toAdd     = files.slice(0, remaining);
+      photos.push(...toAdd);
+      renderPreviews();
+    }
+
+    function removePhoto(index) {
+      photos.splice(index, 1);
+      renderPreviews();
+    }
+
+    function renderPreviews() {
+      const grid  = document.getElementById('preview-grid');
+      const count = document.getElementById('photo-count');
+      grid.innerHTML = '';
+
+      photos.forEach((file, i) => {
+        const url  = URL.createObjectURL(file);
+        const item = document.createElement('div');
+        item.className = 'preview-item' + (i === 0 ? ' hero-badge' : '');
+        item.innerHTML = `
+          <img src="${url}" alt="Photo ${i+1}" />
+          <button class="remove-btn" onclick="removePhoto(${i})" title="Remove">✕</button>
+        `;
+        grid.appendChild(item);
+      });
+
+      count.textContent = photos.length
+        ? `${photos.length} photo${photos.length > 1 ? 's' : ''} added${photos.length === 10 ? ' (maximum reached)' : ''}`
+        : '';
+    }
+
+    // ================================================================
+    //  FORM SUBMISSION
+    // ================================================================
+    async function submitForm() {
+      if (!validateStep(4)) return;
+
+      // Collect all data
+      const firstName  = document.getElementById('firstName').value.trim();
+      const lastName   = document.getElementById('lastName').value.trim();
+      const highSchool = document.getElementById('highSchool').value.trim();
+      const classYear  = document.getElementById('classYear').value.trim();
+      const eventDate  = document.getElementById('eventDate').value;
+      const startTime  = document.getElementById('startTime').value;
+      const endTime    = document.getElementById('endTime').value;
+      const address    = document.getElementById('address').value.trim();
+      const city       = document.getElementById('city').value.trim();
+      const state      = document.getElementById('state').value.trim().toUpperCase();
+      const zip        = document.getElementById('zip').value.trim();
+      const rsvpPhone  = document.getElementById('rsvpPhone').value.replace(/\D/g,'');
+      const rsvpEmail  = document.getElementById('rsvpEmail').value.trim();
+      const rsvpMsg    = document.getElementById('rsvpMessage').value.trim();
+
+      // Generate a URL-safe slug from the name
+      const slug = `${firstName}-${lastName}-${classYear}`
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g, '-')
+        .replace(/-+/g, '-');
+
+      // Show loading
+      showLoading('Uploading your photos…');
+
+      try {
+        // Build FormData to send everything in one request
+        const formData = new FormData();
+        formData.append('slug',       slug);
+        formData.append('firstName',  firstName);
+        formData.append('lastName',   lastName);
+        formData.append('highSchool', highSchool);
+        formData.append('classYear',  classYear);
+        formData.append('eventDate',  eventDate);
+        formData.append('startTime',  startTime);
+        formData.append('endTime',    endTime);
+        formData.append('location',   `${address}, ${city}, ${state} ${zip}`);
+        formData.append('rsvpPhone',  rsvpMode === 'sms' ? rsvpPhone : '');
+        formData.append('rsvpEmail',  rsvpMode === 'email' ? rsvpEmail : '');
+        formData.append('rsvpMsg',    rsvpMsg);
+
+        photos.forEach((file, i) => formData.append(`photo_${i}`, file));
+        formData.append('photoCount', photos.length);
+
+        updateLoadingMsg('Building your invite page…');
+
+        const res  = await fetch('/.netlify/functions/create-invite', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || 'Something went wrong. Please try again.');
+        }
+
+        const data = await res.json();
+        generatedUrl = `${SITE_URL}/invite/${data.slug}`;
+
+        showSuccess();
+
+      } catch (err) {
+        hideLoading();
+        alert(err.message || 'Something went wrong. Please try again.');
+      }
+    }
+
+    // ================================================================
+    //  UI STATE HELPERS
+    // ================================================================
+    function showLoading(msg) {
+      document.getElementById(`step-4`).style.display   = 'none';
+      document.getElementById('loading-screen').classList.add('active');
+      document.getElementById('loading-msg').textContent = msg;
+    }
+
+    function updateLoadingMsg(msg) {
+      document.getElementById('loading-msg').textContent = msg;
+    }
+
+    function hideLoading() {
+      document.getElementById('step-4').style.display = '';
+      document.getElementById('loading-screen').classList.remove('active');
+    }
+
+    function showSuccess() {
+      document.getElementById('loading-screen').classList.remove('active');
+      document.getElementById('invite-url').textContent = generatedUrl;
+      document.getElementById('success-screen').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(generatedUrl).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function openInvite() {
+      window.open(generatedUrl, '_blank');
+    }
+  </script>
+
+</body>
+</html>
