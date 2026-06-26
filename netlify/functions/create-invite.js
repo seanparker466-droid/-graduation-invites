@@ -81,7 +81,7 @@ exports.handler = async (event) => {
       const formData = new URLSearchParams();
       formData.append('file',           dataUri);
       formData.append('upload_preset',  process.env.CLOUDINARY_PRESET);
-      formData.append('folder',         `invites/${finalSlug}`);
+      // Note: folder parameter removed — Cloudinary preset handles organization
 
       const uploadRes = await fetch(
         `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD}/image/upload`,
