@@ -86,7 +86,13 @@ exports.handler = async (event) => {
         { method: 'POST', body: formData }
       );
 
-      if (!uploadRes.ok) throw new Error('Photo upload failed.');
+      // UPDATED ERROR HANDLING: 
+      // This will grab the exact reason Cloudinary rejected the image
+      if (!uploadRes.ok) {
+        const errText = await uploadRes.text();
+        console.error('Cloudinary Error:', errText);
+        throw new Error(`Cloudinary error: ${errText}`);
+      }
 
       const uploadData = await uploadRes.json();
       photoUrls.push(uploadData.secure_url);
